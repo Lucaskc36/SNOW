@@ -1,0 +1,12 @@
+[submodule "external/imgui"]
+	path = external/imgui
+	url = https://github.com/ocornut/imgui.git
+[submodule "external/SDL3"]
+	path = external/SDL3
+	url = https://github.com/libsdl-org/SDL.git
+[submodule "external/gl3w"]
+	path = external/gl3w
+	url = https://github.com/skaslev/gl3w.git
+[submodule "external/glm"]
+	path = external/glm
+	url = https://github.com/g-truc/glm.git

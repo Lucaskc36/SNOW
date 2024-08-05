@@ -1,0 +1,48 @@
+cmake_minimum_required(VERSION 3.28.1)
+set(CMAKE_CXX_STANDARD 20)
+project(SNOW)
+
+set(IMGUI_SOURCES
+    imgui/imgui_demo.cpp
+    imgui/imgui_draw.cpp
+    imgui/imgui_impl_sdl2.cpp
+    imgui/imgui_impl_sdlrenderer2.cpp
+    imgui/imgui_tables.cpp
+    imgui/imgui_widgets.cpp
+    imgui/imgui.cpp
+
+)
+set(IMGUI_HEADERS
+    include/imgui/imconfig.h
+    include/imgui/imgui_internal.h
+    include/imgui/imgui_impl_sdl2.h
+    include/imgui/imgui_impl_sdlrenderer2.h
+    include/imgui/imgui.h
+    include/imgui/imgstb_rectpack.h
+    include/imgui/imgstb_textedit.h
+    include/imgui/imgstb_truetype.h
+)
+set(SOURCES
+    src/main.cpp
+    src/Engine.cpp
+    src/ball.cpp
+    src/UI.cpp
+    ${IMGUI_SOURCES}
+    )
+#SDL PACKAGES
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+find_package(SDL2_ttf REQUIRED)
+#imgui
+#openGL
+#find_package(OpenGL REQUIRED)
+
+
+add_executable(${PROJECT_NAME} ${SOURCES} )
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/include/imgui )
+
+target_link_libraries(${PROJECT_NAME} PRIVATE 
+    SDL2::SDL2 
+    SDL2_image::SDL2_image 
+    SDL2_ttf::SDL2_ttf)
+
