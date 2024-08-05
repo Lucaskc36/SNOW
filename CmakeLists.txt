@@ -1,48 +1,63 @@
-cmake_minimum_required(VERSION 3.28.1)
-set(CMAKE_CXX_STANDARD 20)
+cmake_minimum_required(VERSION 3.10)
 project(SNOW)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_BUILD_TYPE Debug)
+
+# Add SDL3 subdirectory
+add_subdirectory(external/SDL3)
+
+# Include directories
+include_directories(include)
+include_directories(external/gl3w/include)
+include_directories(external/imgui)
+include_directories(external/imgui/backends)
+include_directories(external/glm)
+include_directories(${CMAKE_SOURCE_DIR}/external/SDL3/include)
+
+# Source files
+file(GLOB_RECURSE SOURCES 
+    "src/*.cpp"
+)
+
+# ImGui source files
+set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/external/imgui)
 set(IMGUI_SOURCES
-    imgui/imgui_demo.cpp
-    imgui/imgui_draw.cpp
-    imgui/imgui_impl_sdl2.cpp
-    imgui/imgui_impl_sdlrenderer2.cpp
-    imgui/imgui_tables.cpp
-    imgui/imgui_widgets.cpp
-    imgui/imgui.cpp
-
+    ${IMGUI_DIR}/imgui.cpp
+    ${IMGUI_DIR}/imgui_demo.cpp
+    ${IMGUI_DIR}/imgui_draw.cpp
+    ${IMGUI_DIR}/imgui_tables.cpp
+    ${IMGUI_DIR}/imgui_widgets.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_sdl3.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
 )
-set(IMGUI_HEADERS
-    include/imgui/imconfig.h
-    include/imgui/imgui_internal.h
-    include/imgui/imgui_impl_sdl2.h
-    include/imgui/imgui_impl_sdlrenderer2.h
-    include/imgui/imgui.h
-    include/imgui/imgstb_rectpack.h
-    include/imgui/imgstb_textedit.h
-    include/imgui/imgstb_truetype.h
-)
-set(SOURCES
-    src/main.cpp
-    src/Engine.cpp
-    src/ball.cpp
-    src/UI.cpp
-    ${IMGUI_SOURCES}
-    )
-#SDL PACKAGES
-find_package(SDL2 REQUIRED)
-find_package(SDL2_image REQUIRED)
-find_package(SDL2_ttf REQUIRED)
-#imgui
-#openGL
-#find_package(OpenGL REQUIRED)
 
+# Add gl3w source file
+set(GL3W_SOURCES external/gl3w/src/gl3w.c)
 
-add_executable(${PROJECT_NAME} ${SOURCES} )
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/include/imgui )
+# Add executable
+add_executable(PhysicsEngine ${SOURCES} ${IMGUI_SOURCES} ${GL3W_SOURCES})
 
-target_link_libraries(${PROJECT_NAME} PRIVATE 
-    SDL2::SDL2 
-    SDL2_image::SDL2_image 
-    SDL2_ttf::SDL2_ttf)
+# Link SDL3
+if (WIN32)
+    target_link_libraries(PhysicsEngine SDL3::SDL3)
+elseif (APPLE)
+    target_link_libraries(PhysicsEngine SDL3::SDL3)
+elseif (UNIX)
+    target_link_libraries(PhysicsEngine SDL3::SDL3)
+endif()
 
+# Link OpenGL libraries
+find_package(OpenGL REQUIRED)
+target_link_libraries(PhysicsEngine OpenGL::GL)
+
+# Add ImGui library
+add_library(imgui STATIC ${IMGUI_SOURCES})
+target_include_directories(imgui PRIVATE ${IMGUI_DIR} ${IMGUI_DIR}/backends)
+target_link_libraries(PhysicsEngine imgui)
+
+# Link gl3w
+add_library(gl3w STATIC ${GL3W_SOURCES})
+target_include_directories(gl3w PUBLIC external/gl3w/include)
+target_link_libraries(PhysicsEngine gl3w)

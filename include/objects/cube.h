@@ -18,8 +18,8 @@ Let the Cube posses a scalar c with respect to itself.
 
 class Cube : public Object{
     Cube();//default Constructor
-    Cube(int scale, struct vec3 Centroid);//Parameterized Constructor
-    void draw() override;
+    //Cube(int scale, struct vec3 Centroid);//Parameterized Constructor
+    //void draw() override;
     void rotate();
 
     struct vec3{ //vertice point with respect to the origin

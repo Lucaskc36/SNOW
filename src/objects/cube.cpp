@@ -1,4 +1,4 @@
-#include "../include/cube.h"
+#include "../include/objects/cube.h"
 /*@brief Cube
  *
 */
@@ -15,9 +15,6 @@ Cube::Cube(){
         {200,200,200},
         {100,200,200}
     };
-
-}
-Cube::Cube(int scale, struct vec3 centroid){
 
 }
 void Cube::rotate(){
