@@ -11,10 +11,10 @@ Engine::Engine():
                 screenWidth_(1440),
                 screenHeight_(800),
                 ui(std::make_unique<UI>()),
-                camera(std::make_unique<Camera>())
+                camera(std::make_unique<OrthogonalCamera>())
                 {};
 
-Engine::Engine(std::string& windowName,
+Engine::Engine(const std::string& windowName,
     unsigned int windowHeight,
     unsigned int windowWidth):
 
@@ -24,9 +24,12 @@ Engine::Engine(std::string& windowName,
             screenWidth_(windowHeight),
             screenHeight_(windowWidth),
             ui(std::make_unique<UI>()),
-            camera(std::make_unique<Camera>())
+            camera(std::make_unique<OrthogonalCamera>())
 
-            {};
+            {
+                std::cout << "HELPP" << std::endl;
+
+            };
 
 Engine::~Engine(){
     shutdown();
@@ -34,17 +37,14 @@ Engine::~Engine(){
 
 
 
-bool Engine::initialize(){
-
-    //Initialization check for audio and video, 
-    //This might not be right since we haven't exctly initiated anything yet. 
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0){
-        SDL_Log("SDL could not be INITIALIZED %s\n", SDL_GetError());
+bool Engine::initialize() {
+    // Initialize SDL
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
+        SDL_Log("SDL could not be initialized: %s\n", SDL_GetError());
         return false;
     }
 
-    //should use SDL_GL_GetAttribute() to check the values after creating the OpenGL context, 
-    //since the values obtained can differ from the requested ones.
+    // Set OpenGL attributes
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -54,29 +54,45 @@ bool Engine::initialize(){
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    
-    window_ = SDL_CreateWindow(windowName_.c_str(),
-        screenWidth_, screenHeight_,
-        SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
-    if(window_ == nullptr){
-        SDL_Log("SDL could not be INITIALIZED %s\n", SDL_GetError());
-        isRunning_ = false;
+
+    // Create an SDL window with an OpenGL context
+    window_ = SDL_CreateWindow(windowName_.c_str(), screenWidth_, screenHeight_, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+    if (!window_) {
+        SDL_Log("Window could not be created: %s\n", SDL_GetError());
         return false;
     }
+
     glContext_ = SDL_GL_CreateContext(window_);
     if (!glContext_) {
+        SDL_Log("OpenGL context could not be created: %s\n", SDL_GetError());
         return false;
     }
-    if (gl3wInit() != GL3W_OK){
-        std::cerr << "Failed to initialize GL3W" << std::endl;
+
+    // Enable vsync
+    if (SDL_GL_SetSwapInterval(1) < 0) {
+        SDL_Log("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
     }
-    SDL_GL_SetSwapInterval(1); //enable vsync
+
+    // Initialize gl3w
+    if (gl3wInit() != 0) {
+        std::cerr << "Failed to initialize OpenGL loader!" << std::endl;
+        return false;
+    }
+
+    // Check if the required OpenGL version is supported
+    if (!gl3wIsSupported(3, 3)) {
+        std::cerr << "OpenGL 3.3 not supported!" << std::endl;
+        return false;
+    }
+
+    // Print OpenGL version
+    printOpenGLVersion();
+
     // Set OpenGL viewport and other settings
     glViewport(0, 0, screenWidth_, screenHeight_);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glEnable(GL_DEPTH_TEST);
 
-    // Initialize UI
     if (!ui->initialize(window_, glContext_)) {
         std::cerr << "Failed to initialize UI" << std::endl;
         return false;
@@ -85,6 +101,18 @@ bool Engine::initialize(){
     isRunning_ = true;
     return true;
 }
+void Engine::printOpenGLVersion() {
+    const GLubyte* renderer = glGetString(GL_RENDERER);
+    const GLubyte* version = glGetString(GL_VERSION);
+    GLint major, minor;
+    glGetIntegerv(GL_MAJOR_VERSION, &major);
+    glGetIntegerv(GL_MINOR_VERSION, &minor);
+
+    std::cout << "Renderer: " << renderer << std::endl;
+    std::cout << "OpenGL version supported: " << version << std::endl;
+    std::cout << "OpenGL version (integer): " << major << "." << minor << std::endl;
+}
+
 void Engine::run() {
 
     while (isRunning_) {

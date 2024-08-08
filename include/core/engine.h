@@ -17,18 +17,19 @@ HANDLES
 #include "ui.h"
 #include <string>
 #include <memory>
-#include "../rendering/camera.h"
+#include "../rendering/OrthogonalCamera.h"
 
 class Engine {
 public:
     Engine();
-    Engine(std::string &windowName,
+    Engine(const std::string &windowName,
                 unsigned int windowHeight,
                 unsigned int windowWidth);
     ~Engine();
     bool initialize();
     void run();
     void shutdown();
+    void printOpenGLVersion();
 
 private:
     void handleEvents();
@@ -43,7 +44,7 @@ private:
     std::string windowName_;
 
     std::unique_ptr<UI> ui;
-    std::unique_ptr<Camera> camera;
+    std::unique_ptr<OrthogonalCamera> camera;
 };
 
 #endif // ENGINE_H

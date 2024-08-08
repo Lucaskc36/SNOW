@@ -1,0 +1,13 @@
+{
+    "folders": [
+        {
+            "name": "PhysicsEngine",
+            "path": "."
+        }
+    ],
+    "settings": {
+        "cmake.cmakePath": "/usr/local/bin/cmake", // Update this path as needed
+        "cmake.configureOnOpen": true,
+        "cmake.buildDirectory": "${workspaceFolder}/build"
+    }
+}
