@@ -23,6 +23,10 @@
 #include "../include/world/world.h"
 #include "../include/world/worldObject.h"
 
+//CONTROLLERS
+#include "../include/core/controllers.h"
+
+
 void printOpenGLVersion() {
     const GLubyte* renderer = glGetString(GL_RENDERER); // Get renderer string
     const GLubyte* version = glGetString(GL_VERSION);   // Version as a string
@@ -38,7 +42,7 @@ void printOpenGLVersion() {
 
 int main(){
     //printOpenGLVersion();
-    std::unique_ptr<Engine> engine = std::make_unique<Engine>("SNOW DEFAULT", 800, 1440);
+    std::unique_ptr<Engine> engine = std::make_unique<Engine>();
 
     engine->initialize();
     //initializing the orthogonal Camera

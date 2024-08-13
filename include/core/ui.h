@@ -21,7 +21,7 @@ public:
     ~UI();
     
     bool initialize(SDL_Window* window, SDL_GLContext glContext);
-    void render(Camera& camera);
+    void render();
     void shutdown();
     
 private:

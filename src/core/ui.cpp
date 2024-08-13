@@ -31,7 +31,7 @@ bool UI::initialize(SDL_Window* window, SDL_GLContext glContext) {
     return true;
 }
 
-void UI::render(Camera& camera) {
+void UI::render() {
     // Start the ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL3_NewFrame();
