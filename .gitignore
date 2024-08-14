@@ -3,3 +3,4 @@ build/
 Debugging.code-workspace
 Editing.code-workspace
 TestandRun.code-workspace
+.DS_Store
