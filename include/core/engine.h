@@ -14,10 +14,12 @@ HANDLES
 
 #include <SDL3/SDL.h>
 #include <GL/gl3w.h>
-#include "ui.h"
 #include <string>
 #include <memory>
+#include "ui.h"
+#include "controller.h"
 #include "../rendering/OrthogonalCamera.h"
+#include "../managers/UIManager.h"
 
 class Engine {
 public:
@@ -30,6 +32,7 @@ public:
     void run();
     void shutdown();
     void printOpenGLVersion();
+    
 
 private:
     void handleEvents();
@@ -43,8 +46,8 @@ private:
     int screenHeight_;
     std::string windowName_;
 
-    std::unique_ptr<UI> ui;
-    std::unique_ptr<OrthogonalCamera> camera;
+    UIManager uiManager;
+    std::shared_ptr<Controller> controller;
 };
 
 #endif // ENGINE_H

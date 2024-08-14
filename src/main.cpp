@@ -15,6 +15,7 @@
 #include "imgui_impl_opengl3.h"
 
 //CORE
+#include "../include/core/controller.h"
 #include "../include/core/engine.h"
 //CAMERAS
 #include "../include/rendering/OrthogonalCamera.h"
@@ -23,8 +24,6 @@
 #include "../include/world/world.h"
 #include "../include/world/worldObject.h"
 
-//CONTROLLERS
-#include "../include/core/controllers.h"
 
 
 void printOpenGLVersion() {
@@ -57,6 +56,7 @@ int main(){
 
     // Set the camera for the world
     std::shared_ptr<OrthogonalCamera> camera;
+    
     world->setCamera(camera);
 
     engine->run();

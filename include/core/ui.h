@@ -20,11 +20,12 @@ public:
     UI();
     ~UI();
     
-    bool initialize(SDL_Window* window, SDL_GLContext glContext);
-    void render();
-    void shutdown();
+    virtual void UI_render();
+    virtual void shutdown();
     
 private:
+    bool _enabled;
+    virtual void CreateGuiElements();
     // ImGui context or any other GUI library context
 };
 

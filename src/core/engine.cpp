@@ -10,8 +10,7 @@ Engine::Engine():
                 windowName_("SNOW DEFAULT"),
                 screenWidth_(1440),
                 screenHeight_(800),
-                ui(std::make_unique<UI>()),
-                camera(std::make_unique<OrthogonalCamera>())
+                controller(std::make_shared<Controller>())
                 {};
 
 Engine::Engine(const std::string& windowName,
@@ -23,8 +22,7 @@ Engine::Engine(const std::string& windowName,
             windowName_(windowName),
             screenWidth_(windowHeight),
             screenHeight_(windowWidth),
-            ui(std::make_unique<UI>()),
-            camera(std::make_unique<OrthogonalCamera>())
+            controller(std::make_shared<Controller>())
 
             {
                 std::cout << "HELPP" << std::endl;
@@ -93,73 +91,11 @@ bool Engine::initialize() {
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glEnable(GL_DEPTH_TEST);
 
-    if (!ui->initialize(window_, glContext_)) {
-        std::cerr << "Failed to initialize UI" << std::endl;
-        return false;
-    }
-// INITIALIZE CONTROLLERS
-if (SDL_HasGamepad() == SDL_TRUE) {
-    int gamePadCount = 0;
-    std::cout << "GAMEPAD DETECTED" << std::endl;
-
-    // Get the array of joystick IDs
-    SDL_JoystickID* gamePadIDs = SDL_GetGamepads(&gamePadCount);
-
-    if (gamePadIDs) {
-        std::cout << "GAMEPAD COUNT: " << gamePadCount << std::endl;
-
-        // Iterate through all detected gamepads
-        for (int i = 0; i < gamePadCount; i++) {
-            SDL_JoystickID joystickID = gamePadIDs[i];
-            std::cout << "Joystick ID: " << joystickID << std::endl;
-
-            // Check if the joystick ID is a valid gamepad
-            if (SDL_IsGamepad(joystickID)) {
-                // Get the gamepad from the joystick ID
-                std::cout << "Getting Gamepad from ID" << std::endl;
-
-                SDL_Gamepad* openedGamepad = SDL_OpenGamepad(joystickID);
-                SDL_Gamepad* gamepad = SDL_GetGamepadFromID(joystickID);
-                if (gamepad) {
-                    std::cout << "Opening GamePad: " << gamepad << std::endl;
-
-                    // Open the gamepad for use
-                    if (openedGamepad) {
-                        std::cout << "Returned Memory Address: " << openedGamepad << std::endl;
-
-                        // Test rumble functionality
-                        std::cout << "Testing Rumble" << std::endl;
-                        std::cout << "3" << std::endl;
-                        SDL_Delay(1000);
-                        std::cout << "2" << std::endl;
-                        SDL_Delay(1000);
-                        std::cout << "1" << std::endl;
-                        SDL_Delay(1000);
-                        std::cout << "1000 ms Rumble" << std::endl;
-
-                        int response = SDL_RumbleGamepad(openedGamepad, 0xFFFF, 0xFFFF, 1000);
-                        std::cout << "Test Finished, Return value: " << response << std::endl;
-
-                        // Remember to close the gamepad when done
-                        SDL_CloseGamepad(openedGamepad);
-                    } else {
-                        std::cerr << "Failed to open gamepad with ID: " << joystickID << std::endl;
-                        std::cerr << "ERROR: " << SDL_GetError() << std::endl;
-                    }
-                } else {
-                    std::cerr << "Failed to get gamepad from ID: " << joystickID << std::endl;
-                    std::cerr << "ERROR: " << SDL_GetError() << std::endl;
-                }
-            } else {
-                std::cerr << "Joystick ID: " << joystickID << " is not a valid gamepad." << std::endl;
-            }
-        }
-    } else {
-        std::cerr << "Failed to get gamepad IDs." << std::endl;
-    }
-} else {
-    std::cout << "No game controller" << std::endl;
-    }
+    //Find controller;
+    uiManager.addUI(controller);
+    uiManager.Init(window_, glContext_);
+    //controller->initController();
+    controller->initController();
 
     isRunning_ = true;
     return true;
@@ -190,8 +126,8 @@ void Engine::run() {
 void Engine::render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // Render ImGui UI
-    ui->render();
-
+    uiManager.render();
+    
     // Render other objects, UI, etc.
 }
 void Engine::handleEvents(){
@@ -207,7 +143,7 @@ void Engine::update() {
     // Update game state, physics, objects.
 }
 void Engine::shutdown() {
-    ui->shutdown();
+    uiManager.shutdown();
     SDL_GL_DestroyContext(glContext_);
     SDL_DestroyWindow(window_);
     SDL_Quit();

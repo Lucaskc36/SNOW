@@ -11,36 +11,15 @@ UI::~UI() {
     shutdown();
 }
 
-bool UI::initialize(SDL_Window* window, SDL_GLContext glContext) {
-    // Initialize ImGui
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
 
-// Setup ImGui binding
-    if (!ImGui_ImplSDL3_InitForOpenGL(window, glContext)) {
-        return false;
-    }
-    if (!ImGui_ImplOpenGL3_Init("#version 330")) {
-        return false;
-    }
-
-    // Setup style
-    ImGui::StyleColorsDark();
-    
-    return true;
-}
-
-void UI::render() {
+void UI::UI_render() {
     // Start the ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL3_NewFrame();
     ImGui::NewFrame();
     
-    // Create GUI elements
-    ImGui::Begin("Camera Info");
-    ImGui::Text("Frustum: ..."); // Display camera frustum information
-    ImGui::End();
+    //Create GUI Elements;
+    CreateGuiElements();
 
     // Render GUI
     ImGui::Render();
@@ -52,4 +31,9 @@ void UI::shutdown() {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL3_Shutdown();
     ImGui::DestroyContext();
+}
+void UI::CreateGuiElements(){
+    ImGui::Begin("DEFAULT");
+    ImGui::Text("Frustum: ..."); // Display camera frustum information
+    ImGui::End();
 }
