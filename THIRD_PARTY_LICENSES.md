@@ -9,6 +9,9 @@ This project uses the following third-party libraries, each of which is provided
 - License: See `external/imgui/LICENSE.txt`
 
 ## gl3w
-- License: See `external/gl3w/LICENSE`
+- License: See `external/gl3w/UNLICENSE`
+
+## glm
+- License: See `external/glm/copying.txt`
 
 These licenses are automatically updated with the submodules.
