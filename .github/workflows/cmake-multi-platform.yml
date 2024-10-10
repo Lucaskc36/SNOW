@@ -55,6 +55,9 @@ jobs:
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
     - name: Update Submodules
       run: git submodule update --init --recursive
+    - name: Install OpenGL on Linux
+      if: runner.os == 'Linux'
+      run: sudo apt-get install -y libgl1-mesa-dev
     - name: Run Loader Script
       run: |
         cd external/gl3w
