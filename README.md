@@ -19,7 +19,11 @@ SNOW is a custom-built physics engine created using C++ and SDL3, with a focus o
 - [License](#license)
 - [Contact](#contact)
 
+---
+[![CMake on multiple platforms](https://github.com/Lucaskc36/SNOW/actions/workflows/cmake-multi-platform.yml/badge.svg)](https://github.com/Lucaskc36/SNOW/actions/workflows/cmake-multi-platform.yml)
+---
 ## Features
+
 
 - **Custom Physics Engine**: Supports classical mechanics, differential equations, and linear algebra.
 - **Perspective Camera**: The rendering uses an orthogonal camera for the particle system.
