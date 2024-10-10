@@ -57,7 +57,7 @@ jobs:
       run: git submodule update --init --recursive
     - name: Run Loader Script
       run: |
-        cd exteral
+        cd external
         python3 gl3w_gen.py
         cd ../
     - name: Build Directory
