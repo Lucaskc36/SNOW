@@ -42,6 +42,8 @@ To build and run SNOW, ensure you have the following installed:
 - CMake (version 3.15 or higher)
 - Gl3w
   - Requires Python 3(I don't make the rules)
+- OpenGL development libraries:
+  - On Linux, run: `sudo apt-get install libgl1-mesa-dev`
 - Git
 
 The necessary external libraries (SDL3 and ImGui) will be automatically fetched through submodules.
