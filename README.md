@@ -40,6 +40,8 @@ To build and run SNOW, ensure you have the following installed:
 
 - C++ Compiler (GCC/Clang)
 - CMake (version 3.15 or higher)
+- Gl3w
+  - Requires Python 3(I don't make the rules)
 - Git
 
 The necessary external libraries (SDL3 and ImGui) will be automatically fetched through submodules.
@@ -58,17 +60,23 @@ The necessary external libraries (SDL3 and ImGui) will be automatically fetched 
    ```bash
    cd SNOW
    ```
-4. Create a `build` directory:
+4. Run Gl3W loader
+   ```bash
+   cd external/gl3w
+   python3 gl3w_gen.py
+   cd ../../
+   ```   
+5. Create a `build` directory:
    ```bash
    mkdir build
    cd build
    ```
-5. Build using `cmake`:
+6. Build using `cmake`:
    ```bash
    cmake ..
    make
    ```
-6. Run the program:
+7. Run the program:
    ```bash
    ./PhysicsEngine
    ```
