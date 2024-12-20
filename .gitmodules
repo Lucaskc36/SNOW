@@ -10,3 +10,6 @@
 [submodule "external/glm"]
 	path = external/glm
 	url = https://github.com/g-truc/glm.git
+[submodule "external/runge-kutta"]
+	path = external/runge-kutta
+	url = https://github.com/Lucaskc36/Integrator.git
