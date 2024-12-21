@@ -3,6 +3,7 @@
 #include <imgui.h>
 #include <imgui_impl_sdl3.h>
 #include <imgui_impl_opengl3.h>
+#include <iostream>
 
 UIManager::UIManager(){
 
@@ -32,7 +33,11 @@ bool UIManager::Init(SDL_Window* window, SDL_GLContext glContext){
     return true;
 }
 void UIManager::addUI(std::shared_ptr<UI> element){
-    elements.push_back(element);
+    if (element) {
+        elements.push_back(element);
+    } else {
+        std::cerr << "Warning: Attempted to add a null UI element." << std::endl;
+    }
 }
 void UIManager::removeElement(std::shared_ptr<UI> element){
     return;

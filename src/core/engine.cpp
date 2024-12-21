@@ -90,12 +90,14 @@ bool Engine::initialize() {
     glViewport(0, 0, screenWidth_, screenHeight_);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glEnable(GL_DEPTH_TEST);
+    //Create integrator
+    uiManager.addUI(integrator);
 
     //Find controller;
-    uiManager.addUI(controller);
+    //uiManager.addUI(controller);
     uiManager.Init(window_, glContext_);
     //controller->initController();
-    controller->initController();
+    //controller->initController();
 
     isRunning_ = true;
     return true;

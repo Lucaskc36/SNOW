@@ -18,6 +18,7 @@ HANDLES
 #include <memory>
 #include "ui.h"
 #include "controller.h"
+#include "integrator.h"
 #include "../rendering/OrthogonalCamera.h"
 #include "../managers/UIManager.h"
 
@@ -48,6 +49,7 @@ private:
 
     UIManager uiManager;
     std::shared_ptr<Controller> controller;
+    std::shared_ptr<Integrator> integrator = std::make_shared<Integrator>();
 };
 
 #endif // ENGINE_H

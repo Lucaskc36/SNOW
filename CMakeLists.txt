@@ -14,6 +14,7 @@ include_directories(external/gl3w/include)
 include_directories(external/imgui)
 include_directories(external/imgui/backends)
 include_directories(external/glm)
+include_directories(external/runge-kutta)
 include_directories(${CMAKE_SOURCE_DIR}/external/SDL3/include)
 
 # Source files
